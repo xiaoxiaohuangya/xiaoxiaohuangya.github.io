@@ -30,7 +30,7 @@
 <meta property="og:description" content="前言hexo中一些常用的技巧。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-28T15:59:45.000Z">
-<meta property="article:modified_time" content="2020-06-24T12:45:03.000Z">
+<meta property="article:modified_time" content="2020-09-02T14:00:10.065Z">
 <meta property="article:author" content="小小黄牙">
 <meta name="twitter:card" content="summary">
 
@@ -230,7 +230,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-24 20:45:03" itemprop="dateModified" datetime="2020-06-24T20:45:03+08:00">2020-06-24</time>
+                <time title="修改时间：2020-09-02 22:00:10" itemprop="dateModified" datetime="2020-09-02T22:00:10+08:00">2020-09-02</time>
               </span>
 
           
@@ -259,7 +259,7 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
-              <span>745</span>
+              <span>1.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -294,7 +294,19 @@ tags:
 - jQuery
 - 表格
 - 表单验证
----</code></pre>
+---</code></pre><h3 id="群晖中安装hexo并部署在web上"><a href="#群晖中安装hexo并部署在web上" class="headerlink" title="群晖中安装hexo并部署在web上"></a>群晖中安装hexo并部署在web上</h3><ol>
+<li>Web Station，用来在群晖服务器上发布博客，安装后自带Nginx HTTP后端服务器。</li>
+<li>PHP 5.6、7.0、7.2，都可以一并安装。</li>
+<li>Node.js v8，也是Moments要求安装的版本，安装后npm更新到5.6.0。</li>
+<li>Git Server，可以用来发布到Github上。<br> 安装好以后，需要更新到稳定版。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">npm cache clean -f #清除npm缓存非必须</span><br><span class="line">npm install -g n #安装n模块</span><br><span class="line">cd cd &#x2F;volume1&#x2F;@appstore&#x2F;Node.js_v8&#x2F;usr&#x2F;local&#x2F;bin&#x2F; #找到n命令位置</span><br><span class="line">.&#x2F;n stable #升级node.js到最新稳定版</span><br><span class="line">npm install -g npm #再更新npm</span><br><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+
+<p>以root账户进入群晖系统。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line">ln -s &#x2F;volume1&#x2F;@appstore&#x2F;Node.js_v8&#x2F;usr&#x2F;local&#x2F;lib&#x2F;node_modules&#x2F;hexo-cli&#x2F;bin&#x2F;hexo &#x2F;usr&#x2F;local&#x2F;bin&#x2F;hexo</span><br><span class="line">mkdir &#x2F;volume1&#x2F;web&#x2F;blog</span><br><span class="line">cd  &#x2F;volume1&#x2F;web&#x2F;blog</span><br><span class="line">hexo init # 创建Hexo所需文件</span><br><span class="line">hexo s # 启动博客服务</span><br><span class="line">hexo g # 发布博客</span><br><span class="line">hexo clean # 清空发布，会删除public文件夹</span><br></pre></td></tr></table></figure>
+
+
+
     </div>
 
     
@@ -430,7 +442,7 @@ tags:
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hexo本地运行"><span class="nav-number">2.</span> <span class="nav-text">hexo本地运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hexo中插入图片："><span class="nav-number">3.</span> <span class="nav-text">hexo中插入图片：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#相对路径本地引用"><span class="nav-number">3.1.</span> <span class="nav-text">相对路径本地引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标签插件语法引用"><span class="nav-number">3.2.</span> <span class="nav-text">标签插件语法引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本地图片资源，不限制图片尺寸"><span class="nav-number">3.2.1.</span> <span class="nav-text">本地图片资源，不限制图片尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络图片资源，限制图片显示尺寸"><span class="nav-number">3.2.2.</span> <span class="nav-text">网络图片资源，限制图片显示尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#首行空格："><span class="nav-number">3.2.3.</span> <span class="nav-text">首行空格：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo首页不显示全文"><span class="nav-number">3.2.4.</span> <span class="nav-text">hexo首页不显示全文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo中文章分类，以及标签"><span class="nav-number">3.2.5.</span> <span class="nav-text">hexo中文章分类，以及标签</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hexo本地运行"><span class="nav-number">2.</span> <span class="nav-text">hexo本地运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hexo中插入图片："><span class="nav-number">3.</span> <span class="nav-text">hexo中插入图片：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#相对路径本地引用"><span class="nav-number">3.1.</span> <span class="nav-text">相对路径本地引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标签插件语法引用"><span class="nav-number">3.2.</span> <span class="nav-text">标签插件语法引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#本地图片资源，不限制图片尺寸"><span class="nav-number">3.2.1.</span> <span class="nav-text">本地图片资源，不限制图片尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络图片资源，限制图片显示尺寸"><span class="nav-number">3.2.2.</span> <span class="nav-text">网络图片资源，限制图片显示尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#首行空格："><span class="nav-number">3.2.3.</span> <span class="nav-text">首行空格：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo首页不显示全文"><span class="nav-number">3.2.4.</span> <span class="nav-text">hexo首页不显示全文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hexo中文章分类，以及标签"><span class="nav-number">3.2.5.</span> <span class="nav-text">hexo中文章分类，以及标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#群晖中安装hexo并部署在web上"><span class="nav-number">3.2.6.</span> <span class="nav-text">群晖中安装hexo并部署在web上</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -519,12 +531,12 @@ tags:
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">8k</span>
+    <span title="站点总字数">9k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">7 分钟</span>
+    <span title="站点阅读时长">8 分钟</span>
 </div>
 
 

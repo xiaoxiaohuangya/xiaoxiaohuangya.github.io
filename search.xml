@@ -20,7 +20,19 @@ tags:
 - jQuery
 - 表格
 - 表单验证
----</code></pre>]]></content>
+---</code></pre><h3 id="群晖中安装hexo并部署在web上"><a href="#群晖中安装hexo并部署在web上" class="headerlink" title="群晖中安装hexo并部署在web上"></a>群晖中安装hexo并部署在web上</h3><ol>
+<li>Web Station，用来在群晖服务器上发布博客，安装后自带Nginx HTTP后端服务器。</li>
+<li>PHP 5.6、7.0、7.2，都可以一并安装。</li>
+<li>Node.js v8，也是Moments要求安装的版本，安装后npm更新到5.6.0。</li>
+<li>Git Server，可以用来发布到Github上。<br> 安装好以后，需要更新到稳定版。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm cache clean -f #清除npm缓存非必须</span><br><span class="line">npm install -g n #安装n模块</span><br><span class="line">cd cd &#x2F;volume1&#x2F;@appstore&#x2F;Node.js_v8&#x2F;usr&#x2F;local&#x2F;bin&#x2F; #找到n命令位置</span><br><span class="line">.&#x2F;n stable #升级node.js到最新稳定版</span><br><span class="line">npm install -g npm #再更新npm</span><br><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+
+<p>以root账户进入群晖系统。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line">ln -s &#x2F;volume1&#x2F;@appstore&#x2F;Node.js_v8&#x2F;usr&#x2F;local&#x2F;lib&#x2F;node_modules&#x2F;hexo-cli&#x2F;bin&#x2F;hexo &#x2F;usr&#x2F;local&#x2F;bin&#x2F;hexo</span><br><span class="line">mkdir &#x2F;volume1&#x2F;web&#x2F;blog</span><br><span class="line">cd  &#x2F;volume1&#x2F;web&#x2F;blog</span><br><span class="line">hexo init # 创建Hexo所需文件</span><br><span class="line">hexo s # 启动博客服务</span><br><span class="line">hexo g # 发布博客</span><br><span class="line">hexo clean # 清空发布，会删除public文件夹</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
   </entry>
   <entry>
     <title>群晖安装gitlab心路历程</title>
