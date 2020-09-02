@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>hexo_learning</title>
+    <url>/2020/05/28/hexo-learning/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>hexo中一些常用的技巧。</p>
+<a id="more"></a>
+<h1 id="hexo本地运行"><a href="#hexo本地运行" class="headerlink" title="hexo本地运行"></a>hexo本地运行</h1><pre><code>hexo clean  --删除原来产生静态网址的数据
+hexo g --产生静态网址
+hexo s --启动服务</code></pre><h1 id="hexo中插入图片："><a href="#hexo中插入图片：" class="headerlink" title="hexo中插入图片："></a>hexo中插入图片：</h1><h2 id="相对路径本地引用"><a href="#相对路径本地引用" class="headerlink" title="相对路径本地引用"></a>相对路径本地引用</h2><p>图片除了可以放在统一的images文件夹中，还可以放在文章自己的目录中。文章的目录可以通过站点配置文件_config.yml来生成。</p>
+<pre><code>post_asset_folder: true</code></pre><p>将_config.yml文件中的配置项post_asset_folder设为true后，执行命令$ hexo new post_name，在source/_posts中会生成文章post_name.md和同名文件夹post_name。将图片资源放在post_name中，文章就可以使用相对路径引用图片资源了。</p>
+<pre><code>![](image.jpg)</code></pre><h2 id="标签插件语法引用"><a href="#标签插件语法引用" class="headerlink" title="标签插件语法引用"></a>标签插件语法引用</h2><p>这种相对路径的图片显示方法在博文详情页面显示没有问题，但是在首页预览页面图片将显示不出来。如果希望图片在文章和首页中同时显示，可以使用标签插件语法。</p>
+<h3 id="本地图片资源，不限制图片尺寸"><a href="#本地图片资源，不限制图片尺寸" class="headerlink" title="本地图片资源，不限制图片尺寸"></a>本地图片资源，不限制图片尺寸</h3><pre><code>{% asset_img image.jpg This is an image %}</code></pre><h3 id="网络图片资源，限制图片显示尺寸"><a href="#网络图片资源，限制图片显示尺寸" class="headerlink" title="网络图片资源，限制图片显示尺寸"></a>网络图片资源，限制图片显示尺寸</h3><pre><code>{% img http://www.viemu.com/vi-vim-cheat-sheet.gif 200 400 vi-vim-cheat-sheet %}</code></pre><h3 id="首行空格："><a href="#首行空格：" class="headerlink" title="首行空格："></a>首行空格：</h3><pre><code>&amp;emsp;&amp;emsp;</code></pre><h3 id="hexo首页不显示全文"><a href="#hexo首页不显示全文" class="headerlink" title="hexo首页不显示全文"></a>hexo首页不显示全文</h3><pre><code>&lt;!--more--&gt;</code></pre><p>首页就会显示这条以上的所有内容，隐藏接下来的所有内容。</p>
+<h3 id="hexo中文章分类，以及标签"><a href="#hexo中文章分类，以及标签" class="headerlink" title="hexo中文章分类，以及标签"></a>hexo中文章分类，以及标签</h3><pre><code>---
+title: jQuery对表单的操作及更多应用
+date: 2017-05-26 12:12:57
+categories: 
+- web前端
+tags:
+- jQuery
+- 表格
+- 表单验证
+---</code></pre>]]></content>
+  </entry>
+  <entry>
+    <title>群晖安装gitlab心路历程</title>
+    <url>/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>群晖安装gitlab及配置的流程。</p>
+<a id="more"></a>
+<h1 id="群晖安装gitlab及配置"><a href="#群晖安装gitlab及配置" class="headerlink" title="群晖安装gitlab及配置"></a>群晖安装gitlab及配置</h1><h2 id="通过docker安装，通过阿里云加速器下载镜像。"><a href="#通过docker安装，通过阿里云加速器下载镜像。" class="headerlink" title="通过docker安装，通过阿里云加速器下载镜像。"></a>通过docker安装，通过阿里云加速器下载镜像。</h2><p><a href="https://bfotsscs.mirror.aliyuncs.com" target="_blank" rel="noopener">https://bfotsscs.mirror.aliyuncs.com</a></p>
+<img src="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firstone.jpg" class="" title="This is an image">
+<h2 id="下载完镜像以后，双击安装，进入高级设置"><a href="#下载完镜像以后，双击安装，进入高级设置" class="headerlink" title="下载完镜像以后，双击安装，进入高级设置"></a>下载完镜像以后，双击安装，进入高级设置</h2><p>需要映射的文件夹有：</p>
+<img src="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firsttwo.jpg" class="" title="This is an image">
+<p>文件映射的作用是，将容器中运行的日志、数据、配置在宿主机中可以看到，同步进行修改。<br>需要映射的端口有：</p>
+<img src="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firstthree.jpg" class="" title="This is an image">
+<p>其中80端口是直接访问网页的端口，映射出来通过宿主机的IP进行访问。22端口为SSH端口，映射出来以后通过SSH可以连接，用于以后的文件上传。1081端口为gitlab-pages服务的端口，映射出来才可以访问。443端口作用暂时不清楚。<br>修改完卷和端口以后点击应用。大约20分钟以后，等CPU占用稳定下来即可通过本机的1080端口进行访问。</p>
+<h2 id="gitlab配置"><a href="#gitlab配置" class="headerlink" title="gitlab配置"></a>gitlab配置</h2><p>进入192.168.1.17:1080，可以看到gitlab网页。第一次进入页面默认账户是root，第一次进入页面是设置密码的界面，为管理员密码。设为：hy13886419639</p>
+<h3 id="gitlab占据内存和CPU较大，进行优化。"><a href="#gitlab占据内存和CPU较大，进行优化。" class="headerlink" title="gitlab占据内存和CPU较大，进行优化。"></a>gitlab占据内存和CPU较大，进行优化。</h3><p>打开docker/gitlab/config中的gitlab.rb<br>修改其中的：</p>
+<pre><code># unicorn[&apos;worker_memory_limit_min&apos;] = &quot;1024 * 1 &lt;&lt; 20&quot;
+# unicorn[&apos;worker_memory_limit_max&apos;] = &quot;1280 * 1 &lt;&lt; 20&quot;
+unicorn[&apos;worker_memory_limit_min&apos;] = &quot;200 * 1 &lt;&lt; 20&quot;
+unicorn[&apos;worker_memory_limit_max&apos;] = &quot;300 * 1 &lt;&lt; 20&quot;
+# sidekiq[&apos;concurrency&apos;] = 25
+sidekiq[&apos;concurrency&apos;] = 16
+# postgresql[&apos;shared_buffers&apos;] = &quot;256MB&quot;
+postgresql[&apos;shared_buffers&apos;] = &quot;256MB&quot;
+# postgresql[&apos;max_worker_processes&apos;] = 8
+postgresql[&apos;max_worker_processes&apos;] = 8
+# unicorn[&apos;worker_processes&apos;] = 2
+unicorn[&apos;worker_processes&apos;] = 4</code></pre><p>来源：<a href="https://blog.csdn.net/ouyang_peng/article/details/84066417" target="_blank" rel="noopener">https://blog.csdn.net/ouyang_peng/article/details/84066417</a></p>
+<h3 id="打开gitlab的SSH服务"><a href="#打开gitlab的SSH服务" class="headerlink" title="打开gitlab的SSH服务"></a>打开gitlab的SSH服务</h3><p>设定外部访问的网址：ddns.xiaoxiaohuangya.com:1080，已经在路由器中端口映射，指向的是192.168.1.17:1080，宿主机中端口也映射为容器中的1080端口。此时，由于容器内部的端口已经修改为1080端口，所以需要重新启动容器，将内部的1080端口映射为宿主机的1080端口。</p>
+<h4 id="配置http协议所使用的访问地址-不加端口号默认为80"><a href="#配置http协议所使用的访问地址-不加端口号默认为80" class="headerlink" title="配置http协议所使用的访问地址,不加端口号默认为80"></a>配置http协议所使用的访问地址,不加端口号默认为80</h4><p>external_url ‘<a href="http://ddns.xiaoxiaohuangya.com:1080&#39;">http://ddns.xiaoxiaohuangya.com:1080&#39;</a></p>
+<h4 id="配置ssh协议所使用的访问地址和端口"><a href="#配置ssh协议所使用的访问地址和端口" class="headerlink" title="配置ssh协议所使用的访问地址和端口"></a>配置ssh协议所使用的访问地址和端口</h4><pre><code># gitlab_rails[&apos;gitlab_ssh_host&apos;] = &apos;ssh.host_example.com&apos;
+# gitlab_rails[&apos;time_zone&apos;] = &apos;UTC&apos;
+gitlab_rails[&apos;gitlab_ssh_host&apos;] = &apos;ddns.xiaoxiaohuangya.com&apos;
+gitlab_rails[&apos;time_zone&apos;] = &apos;Asia/Shanghai&apos;
+# gitlab_rails[&apos;gitlab_shell_ssh_port&apos;] = 22
+gitlab_rails[&apos;gitlab_shell_ssh_port&apos;] = 122</code></pre><p>修改完以后：进入容器内部，让配置生效。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker exec -it 9309431d2018 &#x2F;bin&#x2F;bash</span><br><span class="line">gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+<p>最后修改容器内部映射出来的端口！！！与external_url中的端口一致！！！</p>
+<h3 id="打开pages服务，同时打开自定义域名服务。"><a href="#打开pages服务，同时打开自定义域名服务。" class="headerlink" title="打开pages服务，同时打开自定义域名服务。"></a>打开pages服务，同时打开自定义域名服务。</h3><pre><code>nginx[&apos;status&apos;] = {
+&quot;listen_addresses&quot; =&gt; [&quot;127.0.0.1&quot;],
+&quot;fqdn&quot; =&gt; &quot;http://ddns.xiaoxiaohuangya.com:1080&quot;,
+&quot;port&quot; =&gt; 9999,
+&quot;options&quot; =&gt; {
+&quot;stub_status&quot; =&gt; &quot;on&quot;, # Turn on stats
+&quot;access_log&quot; =&gt; &quot;on&quot;, # Disable logs for stats
+&quot;allow&quot; =&gt; &quot;127.0.0.1&quot;, # Only allow access from localhost
+&quot;deny&quot; =&gt; &quot;all&quot; # Deny access to anyone else
+}
+} -- 开启nginx监听端口
+nginx[&apos;enable&apos;] = true --开启nginx服务
+pages_external_url &quot;http://xiaoxiaohuangya.com:1081/&quot; --pages域名，必须要泛解析，生成的每一个静态网页都用这个名字
+gitlab_pages[&apos;enable&apos;] = true --打开gitlab-pages服务
+gitlab_pages[&apos;inplace_chroot&apos;] = true --自定义文件映射，防止权限不足
+gitlab_pages[&apos;redirect_http&apos;] = false --重定向http 
+gitlab_pages[&apos;artifacts_server&apos;] = true
+gitlab_pages[&apos;artifacts_server_timeout&apos;] = 10
+pages_nginx[&apos;enable&apos;] = false 
+gitlab_pages[&apos;external_http&apos;] = [&apos;127.0.0.1:8888&apos;] -- 自定义域名监听端口</code></pre><p>思路来源：<a href="https://blog.csdn.net/soulteary/article/details/96330132" target="_blank" rel="noopener">https://blog.csdn.net/soulteary/article/details/96330132</a><br>        <a href="https://docs.gitlab.com/ce/administration/pages/index.html" target="_blank" rel="noopener">https://docs.gitlab.com/ce/administration/pages/index.html</a><br>error:<br>1.能够开启自定义域名，但是pages无法打开，应该是nginx端口设置问题。修改</p>
+<pre><code>nginx[&apos;status&apos;] = {
+&quot;listen_addresses&quot; =&gt; [&quot;127.0.0.1&quot;],
+&quot;fqdn&quot; =&gt; &quot;http://ddns.xiaoxiaohuangya.com:1080&quot;,
+&quot;port&quot; =&gt; 9999,
+&quot;options&quot; =&gt; {
+&quot;stub_status&quot; =&gt; &quot;on&quot;, # Turn on stats
+&quot;access_log&quot; =&gt; &quot;on&quot;, # Disable logs for stats
+&quot;allow&quot; =&gt; &quot;127.0.0.1&quot;, # Only allow access from localhost
+&quot;deny&quot; =&gt; &quot;all&quot; # Deny access to anyone else
+}
+}
+nginx[&apos;enable&apos;] = true
+pages_external_url &quot;http://xiaoxiaohuangya.com:1081/&quot;
+gitlab_pages[&apos;enable&apos;] = true
+gitlab_pages[&apos;inplace_chroot&apos;] = true
+gitlab_pages[&apos;redirect_http&apos;] = false
+gitlab_pages[&apos;artifacts_server&apos;] = true
+gitlab_pages[&apos;artifacts_server_timeout&apos;] = 10
+pages_nginx[&apos;enable&apos;] = false
+gitlab_pages[&apos;external_http&apos;] = [&apos;127.0.0.1:8888&apos;]</code></pre><p>修改后：</p>
+<pre><code>pages_external_url &quot;http://xiaoxiaohuangya.com:1081/&quot;
+gitlab_pages[&apos;enable&apos;] = true
+gitlab_pages[&apos;inplace_chroot&apos;] = true
+gitlab_pages[&apos;artifacts_server&apos;] = true
+gitlab_pages[&apos;artifacts_server_timeout&apos;] = 10
+gitlab_pages[&apos;external_http&apos;] = [&apos;127.0.0.1:8888&apos;]</code></pre><h3 id="开启另一个gitlab-runner镜像，执行CICD工作。"><a href="#开启另一个gitlab-runner镜像，执行CICD工作。" class="headerlink" title="开启另一个gitlab-runner镜像，执行CICD工作。"></a>开启另一个gitlab-runner镜像，执行CICD工作。</h3><p>由于gitlab-runner运行起来需要镜像，从而需要读取宿主机的镜像仓库，需要将宿主机的配置映射过来，而宿主机的配置为隐藏文件，无法通过群晖的界面进行设定。<br>运行docker-runner镜像：</p>
+<pre><code>docker run -d --name gitlab-runner --restart always -v /volume2/docker/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest</code></pre><p>进入容器内：</p>
+<pre><code>docker exec -it gitlab-runner bash</code></pre><p>注册：</p>
+<pre><code>gitlab-runner register</code></pre><p>执行引擎选择docker，需要指定默认镜像，runner运行时候，是docker in docker模式，根据指定的镜像起一个容器，在容器中执行操作。<br>修改config.toml，不会重复去远端拉取镜像，使用本地的镜像。<br>修改完成以后，重启容器。</p>
+<pre><code>docker restart gitlab-runner</code></pre><p>需要在每个仓库里添加CI/CD命令。现在用的有两种。<br>1.仅pull push操作。</p>
+<pre><code>image: alpine:latest
+stages:
+  - test
+test:
+  stage: test
+  script:
+    - ls
+  when: on_success
+  only:
+   - master
+  tags:
+    - ci-cd</code></pre><p>2.使用node镜像进行部署。</p>
+<pre><code>building: //自己随便命名的
+  image: node:latest //node镜像为最新版的，最好指定版本号
+  stage: build //当前stage阶段为build
+  script: //build阶段运行的脚本
+    - npm cache clean -f
+    - npm install hexo-cli -g
+    - npm install
+    - npm run build //打包
+  artifacts: //工件，可以缓存在gitlab的流水线记录中，供直接下载
+    expire_in: 3 days //工件缓存的有效时间
+    paths: //路径
+      - dist //工件指向的目录，这里指整个dist目录
+
+cache: //缓存
+  paths: //路径
+    - node_modules/ //缓存node_mudules将大大提高ci运行的速度
+
+pages: //随便起的名字
+  stage: deploy //当前阶段为deploy
+  script: //deploy阶段运行的命令
+    - rm -rf public/* //linux命令，递归无询问删除public目录下所有文件
+    - mv dist/* public //将dist目录下的所有文件都移动到public目录下
+  artifacts: //工件缓存
+    expire_in: 3 days //时效为3天
+    paths: //路径
+      - public //缓存整个public目录的文件
+  only:
+    - master //ceate pages下的所有操作只在dev分支上进行</code></pre><p>来源：<a href="https://juejin.im/post/5dba88c5f265da4cf3768148" target="_blank" rel="noopener">https://juejin.im/post/5dba88c5f265da4cf3768148</a><br>&emsp;&emsp;部署的时候，由于没有上传插件文件夹，所以需要在gitlab-ci.yml中执行</p>
+<pre><code>- npm install --save hexo-helper-live2d
+- npm install --save live2d-widget-model-tororo</code></pre><p>&emsp;&emsp;安装两个插件。<br>    &emsp;&emsp;而从gitlab上git clone下来以后，只需按照提示执行<br>&emsp;&emsp;即会自动安装所有插件，可以运行起来。</p>
+<h3 id="开启smtp服务，gitlab可以调用126邮箱发邮件。"><a href="#开启smtp服务，gitlab可以调用126邮箱发邮件。" class="headerlink" title="开启smtp服务，gitlab可以调用126邮箱发邮件。"></a>开启smtp服务，gitlab可以调用126邮箱发邮件。</h3><pre><code>gitlab_rails[&apos;gitlab_email_enabled&apos;] = true
+gitlab_rails[&apos;gitlab_email_from&apos;] = &apos;xiaoxiaohuangya@126.com&apos;
+gitlab_rails[&apos;gitlab_email_display_name&apos;] = &apos;GitLab&apos;
+gitlab_rails[&apos;gitlab_email_reply_to&apos;] = &apos;404390899@qq.com&apos;
+
+gitlab_rails[&apos;smtp_enable&apos;] = true
+gitlab_rails[&apos;smtp_address&apos;] = &quot;smtp.126.com&quot;
+gitlab_rails[&apos;smtp_port&apos;] = 25
+gitlab_rails[&apos;smtp_user_name&apos;] = &quot;xiaoxiaohuangya@126.com&quot;
+gitlab_rails[&apos;smtp_password&apos;] = &quot;USAYZVJKRXTWPVSQ&quot;
+gitlab_rails[&apos;smtp_domain&apos;] = &quot;126.com&quot;
+gitlab_rails[&apos;smtp_authentication&apos;] = &quot;login&quot;
+gitlab_rails[&apos;smtp_enable_starttls_auto&apos;] = true
+gitlab_rails[&apos;smtp_tls&apos;] = false # This is the default and can be omitted
+gitlab_rails[&apos;smtp_ssl&apos;] = false # This is the default and can be omitted
+gitlab_rails[&apos;smtp_openssl_verify_mode&apos;] = &apos;peer&apos;</code></pre><p>参考：<a href="https://www.wandouip.com/t5i134350/" target="_blank" rel="noopener">https://www.wandouip.com/t5i134350/</a><br>    <a href="https://docs.gitlab.com/omnibus/settings/smtp.html" target="_blank" rel="noopener">https://docs.gitlab.com/omnibus/settings/smtp.html</a></p>
+<pre><code>sudo docker exec gitlab-gitlab-ce1 gitlab-ctl reconfigure
+sudo docker exec -it gitlab-gitlab-ce1 bash --进入docker. bash
+gitlab-ctl reconfigure -- 配置文件生效
+gitlab-rails console
+Notify.test_email(&apos;kobe001001@126.com&apos;, &apos;Message Subject&apos;, &apos;小小黄牙&apos;).deliver_now</code></pre>]]></content>
+      <categories>
+        <category>群晖</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+</search>

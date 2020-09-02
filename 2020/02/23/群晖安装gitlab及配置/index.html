@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/love.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-mac-osx.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xiaoxiaohuangya.github.io","root":"/","scheme":"Muse","version":"8.0.0-rc.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="小白从无到有，一路遇到过的坑，mark一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="群晖安装gitlab心路历程">
+<meta property="og:url" content="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="小小黄牙的博客">
+<meta property="og:description" content="小白从无到有，一路遇到过的坑，mark一下。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firstone.jpg">
+<meta property="og:image" content="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firsttwo.jpg">
+<meta property="og:image" content="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firstthree.jpg">
+<meta property="article:published_time" content="2020-02-23T14:55:10.000Z">
+<meta property="article:modified_time" content="2020-06-24T12:40:58.000Z">
+<meta property="article:author" content="小小黄牙">
+<meta property="article:tag" content="gitlab">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firstone.jpg">
+
+<link rel="canonical" href="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>群晖安装gitlab心路历程 | 小小黄牙的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"><a href="http://ddns.xiaoxiaohuangya.com:1080/" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">小小黄牙的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">爱好生活的小小黄牙</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/kobe.jpg">
+      <meta itemprop="name" content="小小黄牙">
+      <meta itemprop="description" content="If you really want it !">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小小黄牙的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          群晖安装gitlab心路历程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-23 22:55:10" itemprop="dateCreated datePublished" datetime="2020-02-23T22:55:10+08:00">2020-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-24 20:40:58" itemprop="dateModified" datetime="2020-06-24T20:40:58+08:00">2020-06-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BE%A4%E6%99%96/" itemprop="url" rel="index"><span itemprop="name">群晖</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/" class="post-meta-item leancloud_visitors" data-flag-title="群晖安装gitlab心路历程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span>7.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span>7 分钟</span>
+            </span>
+            <div class="post-description">小白从无到有，一路遇到过的坑，mark一下。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>群晖安装gitlab及配置的流程。</p>
+<a id="more"></a>
+<h1 id="群晖安装gitlab及配置"><a href="#群晖安装gitlab及配置" class="headerlink" title="群晖安装gitlab及配置"></a>群晖安装gitlab及配置</h1><h2 id="通过docker安装，通过阿里云加速器下载镜像。"><a href="#通过docker安装，通过阿里云加速器下载镜像。" class="headerlink" title="通过docker安装，通过阿里云加速器下载镜像。"></a>通过docker安装，通过阿里云加速器下载镜像。</h2><p><a href="https://bfotsscs.mirror.aliyuncs.com" target="_blank" rel="noopener">https://bfotsscs.mirror.aliyuncs.com</a></p>
+<img src="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firstone.jpg" class="" title="This is an image">
+<h2 id="下载完镜像以后，双击安装，进入高级设置"><a href="#下载完镜像以后，双击安装，进入高级设置" class="headerlink" title="下载完镜像以后，双击安装，进入高级设置"></a>下载完镜像以后，双击安装，进入高级设置</h2><p>需要映射的文件夹有：</p>
+<img src="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firsttwo.jpg" class="" title="This is an image">
+<p>文件映射的作用是，将容器中运行的日志、数据、配置在宿主机中可以看到，同步进行修改。<br>需要映射的端口有：</p>
+<img src="/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/firstthree.jpg" class="" title="This is an image">
+<p>其中80端口是直接访问网页的端口，映射出来通过宿主机的IP进行访问。22端口为SSH端口，映射出来以后通过SSH可以连接，用于以后的文件上传。1081端口为gitlab-pages服务的端口，映射出来才可以访问。443端口作用暂时不清楚。<br>修改完卷和端口以后点击应用。大约20分钟以后，等CPU占用稳定下来即可通过本机的1080端口进行访问。</p>
+<h2 id="gitlab配置"><a href="#gitlab配置" class="headerlink" title="gitlab配置"></a>gitlab配置</h2><p>进入192.168.1.17:1080，可以看到gitlab网页。第一次进入页面默认账户是root，第一次进入页面是设置密码的界面，为管理员密码。设为：hy13886419639</p>
+<h3 id="gitlab占据内存和CPU较大，进行优化。"><a href="#gitlab占据内存和CPU较大，进行优化。" class="headerlink" title="gitlab占据内存和CPU较大，进行优化。"></a>gitlab占据内存和CPU较大，进行优化。</h3><p>打开docker/gitlab/config中的gitlab.rb<br>修改其中的：</p>
+<pre><code># unicorn[&apos;worker_memory_limit_min&apos;] = &quot;1024 * 1 &lt;&lt; 20&quot;
+# unicorn[&apos;worker_memory_limit_max&apos;] = &quot;1280 * 1 &lt;&lt; 20&quot;
+unicorn[&apos;worker_memory_limit_min&apos;] = &quot;200 * 1 &lt;&lt; 20&quot;
+unicorn[&apos;worker_memory_limit_max&apos;] = &quot;300 * 1 &lt;&lt; 20&quot;
+# sidekiq[&apos;concurrency&apos;] = 25
+sidekiq[&apos;concurrency&apos;] = 16
+# postgresql[&apos;shared_buffers&apos;] = &quot;256MB&quot;
+postgresql[&apos;shared_buffers&apos;] = &quot;256MB&quot;
+# postgresql[&apos;max_worker_processes&apos;] = 8
+postgresql[&apos;max_worker_processes&apos;] = 8
+# unicorn[&apos;worker_processes&apos;] = 2
+unicorn[&apos;worker_processes&apos;] = 4</code></pre><p>来源：<a href="https://blog.csdn.net/ouyang_peng/article/details/84066417" target="_blank" rel="noopener">https://blog.csdn.net/ouyang_peng/article/details/84066417</a></p>
+<h3 id="打开gitlab的SSH服务"><a href="#打开gitlab的SSH服务" class="headerlink" title="打开gitlab的SSH服务"></a>打开gitlab的SSH服务</h3><p>设定外部访问的网址：ddns.xiaoxiaohuangya.com:1080，已经在路由器中端口映射，指向的是192.168.1.17:1080，宿主机中端口也映射为容器中的1080端口。此时，由于容器内部的端口已经修改为1080端口，所以需要重新启动容器，将内部的1080端口映射为宿主机的1080端口。</p>
+<h4 id="配置http协议所使用的访问地址-不加端口号默认为80"><a href="#配置http协议所使用的访问地址-不加端口号默认为80" class="headerlink" title="配置http协议所使用的访问地址,不加端口号默认为80"></a>配置http协议所使用的访问地址,不加端口号默认为80</h4><p>external_url ‘<a href="http://ddns.xiaoxiaohuangya.com:1080&#39;">http://ddns.xiaoxiaohuangya.com:1080&#39;</a></p>
+<h4 id="配置ssh协议所使用的访问地址和端口"><a href="#配置ssh协议所使用的访问地址和端口" class="headerlink" title="配置ssh协议所使用的访问地址和端口"></a>配置ssh协议所使用的访问地址和端口</h4><pre><code># gitlab_rails[&apos;gitlab_ssh_host&apos;] = &apos;ssh.host_example.com&apos;
+# gitlab_rails[&apos;time_zone&apos;] = &apos;UTC&apos;
+gitlab_rails[&apos;gitlab_ssh_host&apos;] = &apos;ddns.xiaoxiaohuangya.com&apos;
+gitlab_rails[&apos;time_zone&apos;] = &apos;Asia/Shanghai&apos;
+# gitlab_rails[&apos;gitlab_shell_ssh_port&apos;] = 22
+gitlab_rails[&apos;gitlab_shell_ssh_port&apos;] = 122</code></pre><p>修改完以后：进入容器内部，让配置生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it 9309431d2018 &#x2F;bin&#x2F;bash</span><br><span class="line">gitlab-ctl reconfigure</span><br></pre></td></tr></table></figure>
+<p>最后修改容器内部映射出来的端口！！！与external_url中的端口一致！！！</p>
+<h3 id="打开pages服务，同时打开自定义域名服务。"><a href="#打开pages服务，同时打开自定义域名服务。" class="headerlink" title="打开pages服务，同时打开自定义域名服务。"></a>打开pages服务，同时打开自定义域名服务。</h3><pre><code>nginx[&apos;status&apos;] = {
+&quot;listen_addresses&quot; =&gt; [&quot;127.0.0.1&quot;],
+&quot;fqdn&quot; =&gt; &quot;http://ddns.xiaoxiaohuangya.com:1080&quot;,
+&quot;port&quot; =&gt; 9999,
+&quot;options&quot; =&gt; {
+&quot;stub_status&quot; =&gt; &quot;on&quot;, # Turn on stats
+&quot;access_log&quot; =&gt; &quot;on&quot;, # Disable logs for stats
+&quot;allow&quot; =&gt; &quot;127.0.0.1&quot;, # Only allow access from localhost
+&quot;deny&quot; =&gt; &quot;all&quot; # Deny access to anyone else
+}
+} -- 开启nginx监听端口
+nginx[&apos;enable&apos;] = true --开启nginx服务
+pages_external_url &quot;http://xiaoxiaohuangya.com:1081/&quot; --pages域名，必须要泛解析，生成的每一个静态网页都用这个名字
+gitlab_pages[&apos;enable&apos;] = true --打开gitlab-pages服务
+gitlab_pages[&apos;inplace_chroot&apos;] = true --自定义文件映射，防止权限不足
+gitlab_pages[&apos;redirect_http&apos;] = false --重定向http 
+gitlab_pages[&apos;artifacts_server&apos;] = true
+gitlab_pages[&apos;artifacts_server_timeout&apos;] = 10
+pages_nginx[&apos;enable&apos;] = false 
+gitlab_pages[&apos;external_http&apos;] = [&apos;127.0.0.1:8888&apos;] -- 自定义域名监听端口</code></pre><p>思路来源：<a href="https://blog.csdn.net/soulteary/article/details/96330132" target="_blank" rel="noopener">https://blog.csdn.net/soulteary/article/details/96330132</a><br>        <a href="https://docs.gitlab.com/ce/administration/pages/index.html" target="_blank" rel="noopener">https://docs.gitlab.com/ce/administration/pages/index.html</a><br>error:<br>1.能够开启自定义域名，但是pages无法打开，应该是nginx端口设置问题。修改</p>
+<pre><code>nginx[&apos;status&apos;] = {
+&quot;listen_addresses&quot; =&gt; [&quot;127.0.0.1&quot;],
+&quot;fqdn&quot; =&gt; &quot;http://ddns.xiaoxiaohuangya.com:1080&quot;,
+&quot;port&quot; =&gt; 9999,
+&quot;options&quot; =&gt; {
+&quot;stub_status&quot; =&gt; &quot;on&quot;, # Turn on stats
+&quot;access_log&quot; =&gt; &quot;on&quot;, # Disable logs for stats
+&quot;allow&quot; =&gt; &quot;127.0.0.1&quot;, # Only allow access from localhost
+&quot;deny&quot; =&gt; &quot;all&quot; # Deny access to anyone else
+}
+}
+nginx[&apos;enable&apos;] = true
+pages_external_url &quot;http://xiaoxiaohuangya.com:1081/&quot;
+gitlab_pages[&apos;enable&apos;] = true
+gitlab_pages[&apos;inplace_chroot&apos;] = true
+gitlab_pages[&apos;redirect_http&apos;] = false
+gitlab_pages[&apos;artifacts_server&apos;] = true
+gitlab_pages[&apos;artifacts_server_timeout&apos;] = 10
+pages_nginx[&apos;enable&apos;] = false
+gitlab_pages[&apos;external_http&apos;] = [&apos;127.0.0.1:8888&apos;]</code></pre><p>修改后：</p>
+<pre><code>pages_external_url &quot;http://xiaoxiaohuangya.com:1081/&quot;
+gitlab_pages[&apos;enable&apos;] = true
+gitlab_pages[&apos;inplace_chroot&apos;] = true
+gitlab_pages[&apos;artifacts_server&apos;] = true
+gitlab_pages[&apos;artifacts_server_timeout&apos;] = 10
+gitlab_pages[&apos;external_http&apos;] = [&apos;127.0.0.1:8888&apos;]</code></pre><h3 id="开启另一个gitlab-runner镜像，执行CICD工作。"><a href="#开启另一个gitlab-runner镜像，执行CICD工作。" class="headerlink" title="开启另一个gitlab-runner镜像，执行CICD工作。"></a>开启另一个gitlab-runner镜像，执行CICD工作。</h3><p>由于gitlab-runner运行起来需要镜像，从而需要读取宿主机的镜像仓库，需要将宿主机的配置映射过来，而宿主机的配置为隐藏文件，无法通过群晖的界面进行设定。<br>运行docker-runner镜像：</p>
+<pre><code>docker run -d --name gitlab-runner --restart always -v /volume2/docker/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest</code></pre><p>进入容器内：</p>
+<pre><code>docker exec -it gitlab-runner bash</code></pre><p>注册：</p>
+<pre><code>gitlab-runner register</code></pre><p>执行引擎选择docker，需要指定默认镜像，runner运行时候，是docker in docker模式，根据指定的镜像起一个容器，在容器中执行操作。<br>修改config.toml，不会重复去远端拉取镜像，使用本地的镜像。<br>修改完成以后，重启容器。</p>
+<pre><code>docker restart gitlab-runner</code></pre><p>需要在每个仓库里添加CI/CD命令。现在用的有两种。<br>1.仅pull push操作。</p>
+<pre><code>image: alpine:latest
+stages:
+  - test
+test:
+  stage: test
+  script:
+    - ls
+  when: on_success
+  only:
+   - master
+  tags:
+    - ci-cd</code></pre><p>2.使用node镜像进行部署。</p>
+<pre><code>building: //自己随便命名的
+  image: node:latest //node镜像为最新版的，最好指定版本号
+  stage: build //当前stage阶段为build
+  script: //build阶段运行的脚本
+    - npm cache clean -f
+    - npm install hexo-cli -g
+    - npm install
+    - npm run build //打包
+  artifacts: //工件，可以缓存在gitlab的流水线记录中，供直接下载
+    expire_in: 3 days //工件缓存的有效时间
+    paths: //路径
+      - dist //工件指向的目录，这里指整个dist目录
+
+cache: //缓存
+  paths: //路径
+    - node_modules/ //缓存node_mudules将大大提高ci运行的速度
+
+pages: //随便起的名字
+  stage: deploy //当前阶段为deploy
+  script: //deploy阶段运行的命令
+    - rm -rf public/* //linux命令，递归无询问删除public目录下所有文件
+    - mv dist/* public //将dist目录下的所有文件都移动到public目录下
+  artifacts: //工件缓存
+    expire_in: 3 days //时效为3天
+    paths: //路径
+      - public //缓存整个public目录的文件
+  only:
+    - master //ceate pages下的所有操作只在dev分支上进行</code></pre><p>来源：<a href="https://juejin.im/post/5dba88c5f265da4cf3768148" target="_blank" rel="noopener">https://juejin.im/post/5dba88c5f265da4cf3768148</a><br>&emsp;&emsp;部署的时候，由于没有上传插件文件夹，所以需要在gitlab-ci.yml中执行</p>
+<pre><code>- npm install --save hexo-helper-live2d
+- npm install --save live2d-widget-model-tororo</code></pre><p>&emsp;&emsp;安装两个插件。<br>    &emsp;&emsp;而从gitlab上git clone下来以后，只需按照提示执行<br>&emsp;&emsp;即会自动安装所有插件，可以运行起来。</p>
+<h3 id="开启smtp服务，gitlab可以调用126邮箱发邮件。"><a href="#开启smtp服务，gitlab可以调用126邮箱发邮件。" class="headerlink" title="开启smtp服务，gitlab可以调用126邮箱发邮件。"></a>开启smtp服务，gitlab可以调用126邮箱发邮件。</h3><pre><code>gitlab_rails[&apos;gitlab_email_enabled&apos;] = true
+gitlab_rails[&apos;gitlab_email_from&apos;] = &apos;xiaoxiaohuangya@126.com&apos;
+gitlab_rails[&apos;gitlab_email_display_name&apos;] = &apos;GitLab&apos;
+gitlab_rails[&apos;gitlab_email_reply_to&apos;] = &apos;404390899@qq.com&apos;
+
+gitlab_rails[&apos;smtp_enable&apos;] = true
+gitlab_rails[&apos;smtp_address&apos;] = &quot;smtp.126.com&quot;
+gitlab_rails[&apos;smtp_port&apos;] = 25
+gitlab_rails[&apos;smtp_user_name&apos;] = &quot;xiaoxiaohuangya@126.com&quot;
+gitlab_rails[&apos;smtp_password&apos;] = &quot;USAYZVJKRXTWPVSQ&quot;
+gitlab_rails[&apos;smtp_domain&apos;] = &quot;126.com&quot;
+gitlab_rails[&apos;smtp_authentication&apos;] = &quot;login&quot;
+gitlab_rails[&apos;smtp_enable_starttls_auto&apos;] = true
+gitlab_rails[&apos;smtp_tls&apos;] = false # This is the default and can be omitted
+gitlab_rails[&apos;smtp_ssl&apos;] = false # This is the default and can be omitted
+gitlab_rails[&apos;smtp_openssl_verify_mode&apos;] = &apos;peer&apos;</code></pre><p>参考：<a href="https://www.wandouip.com/t5i134350/" target="_blank" rel="noopener">https://www.wandouip.com/t5i134350/</a><br>    <a href="https://docs.gitlab.com/omnibus/settings/smtp.html" target="_blank" rel="noopener">https://docs.gitlab.com/omnibus/settings/smtp.html</a></p>
+<pre><code>sudo docker exec gitlab-gitlab-ce1 gitlab-ctl reconfigure
+sudo docker exec -it gitlab-gitlab-ce1 bash --进入docker. bash
+gitlab-ctl reconfigure -- 配置文件生效
+gitlab-rails console
+Notify.test_email(&apos;kobe001001@126.com&apos;, &apos;Message Subject&apos;, &apos;小小黄牙&apos;).deliver_now</code></pre>
+    </div>
+
+    
+    
+    
+<div>
+    
+        <div>
+    
+    <div style="text-align:center;color: #ccc;font-size:14px;">
+        -------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------
+    </div>
+    
+</div>
+
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/self.jpg" alt="小小黄牙 wechat" style="width: auto; height:250px; max-width: 100%;"/>
+    <div>若有技术问题，欢迎加好友共同学习～</div>
+</div>
+
+    
+</div>
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    鼓励
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="小小黄牙 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="小小黄牙 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>小小黄牙
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://xiaoxiaohuangya.github.io/2020/02/23/%E7%BE%A4%E6%99%96%E5%AE%89%E8%A3%85gitlab%E5%8F%8A%E9%85%8D%E7%BD%AE/" title="群晖安装gitlab心路历程">https://xiaoxiaohuangya.github.io/2020/02/23/群晖安装gitlab及配置/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/gitlab/" rel="tag"># gitlab</a>
+              <a href="/tags/docker/" rel="tag"># docker</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/28/hexo-learning/" rel="next" title="hexo_learning">
+      hexo_learning <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+        <! -- 添加微信图标 -->
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#群晖安装gitlab及配置"><span class="nav-number">2.</span> <span class="nav-text">群晖安装gitlab及配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通过docker安装，通过阿里云加速器下载镜像。"><span class="nav-number">2.1.</span> <span class="nav-text">通过docker安装，通过阿里云加速器下载镜像。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载完镜像以后，双击安装，进入高级设置"><span class="nav-number">2.2.</span> <span class="nav-text">下载完镜像以后，双击安装，进入高级设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gitlab配置"><span class="nav-number">2.3.</span> <span class="nav-text">gitlab配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gitlab占据内存和CPU较大，进行优化。"><span class="nav-number">2.3.1.</span> <span class="nav-text">gitlab占据内存和CPU较大，进行优化。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开gitlab的SSH服务"><span class="nav-number">2.3.2.</span> <span class="nav-text">打开gitlab的SSH服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置http协议所使用的访问地址-不加端口号默认为80"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">配置http协议所使用的访问地址,不加端口号默认为80</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置ssh协议所使用的访问地址和端口"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">配置ssh协议所使用的访问地址和端口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开pages服务，同时打开自定义域名服务。"><span class="nav-number">2.3.3.</span> <span class="nav-text">打开pages服务，同时打开自定义域名服务。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启另一个gitlab-runner镜像，执行CICD工作。"><span class="nav-number">2.3.4.</span> <span class="nav-text">开启另一个gitlab-runner镜像，执行CICD工作。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启smtp服务，gitlab可以调用126邮箱发邮件。"><span class="nav-number">2.3.5.</span> <span class="nav-text">开启smtp服务，gitlab可以调用126邮箱发邮件。</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="小小黄牙"
+      src="/images/kobe.jpg">
+  <p class="site-author-name" itemprop="name">小小黄牙</p>
+  <div class="site-description" itemprop="description">If you really want it !</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/1024DAY" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1024DAY" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.google.com.hk/" title="Google → https:&#x2F;&#x2F;www.google.com.hk&#x2F;" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-external-link-square-alt fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com&#x2F;" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.weibo.com/" title="https:&#x2F;&#x2F;www.weibo.com&#x2F;" rel="noopener" target="_blank">微博</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小小黄牙</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">8k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">7 分钟</span>
+</div>
+
+
+
+<div class="BbeiAn-info">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51010602000549" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="https://static.dy208.cn/o_1dfilp8ruo521thr1hvf18ji17soa.png" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">沪ICP备19045250号</p></a>
+</div>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span>本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<span>总访客<span id="busuanzi_value_site_uv"></span>人</span>
+
+<!--《添加网站运行时间 -->
+<!--<br/>-->
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+
+    function createtime() {
+        var grt = new Date("05/20/2020 12:00:00"); //此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime() + 250);
+        days = (now - grt) / 1000 / 60 / 60 / 24;
+        dnum = Math.floor(days);
+        hours = (now - grt) / 1000 / 60 / 60 - (24 * dnum);
+        hnum = Math.floor(hours);
+        if (String(hnum).length == 1) {
+            hnum = "0" + hnum;
+        }
+        minutes = (now - grt) / 1000 / 60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes);
+        if (String(mnum).length == 1) {
+            mnum = "0" + mnum;
+        }
+        seconds = (now - grt) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds);
+        if (String(snum).length == 1) {
+            snum = "0" + snum;
+        }
+        document.getElementById("timeDate").innerHTML = " | 本站已安全运行 " + dnum + " 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+    setInterval("createtime()", 250);
+</script>
+
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el         : '#valine-comments',
+      path       : location.pathname,
+    }, {"enable":true,"appId":"s6S6beqTNPHechir7UURgncH-gzGzoHsz","appKey":"lIjYXLE0qnmJRMF6KeJT4t9E","notify":true,"verify":false,"placeholder":"ヾﾉ≧∀≦)o快来评论一下吧!","avatar":"monsterid","meta":["nick","mail","link"],"pageSize":10,"language":null,"visitor":true,"comment_count":true,"recordIP":false,"serverURLs":null}
+    ));
+  }, window.Valine);
+});
+</script>
+
+  
+  <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
